@@ -1,9 +1,25 @@
-FROM maven:3.6.0-jdk-11-slim as build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUn mvn -f /home/app/pom.xml clean package
+# Use a Maven & Java base image
+FROM maven:3.8.4-openjdk-11 AS builder
+# Set the working directory in the container
+WORKDIR /app
+# Copy the Maven configuration file
+COPY pom.xml .
+# Copy the source code
+COPY src ./src
 
+# Build the project
+RUN mvn clean package
+# Use a lightweight base image
+FROM openjdk:11-jdk-slim
+# Set the working directory in the container
+WORKDIR /app
 
-From open jdk:21-jre-slim
-COPY --from=build /home/app/target/back-0.0.1-SNAPSHOT.jar /usr/local/lib/demo.jar
-ENTRYPOINT ["java", "-jar","/usr/local/lib/demo.jar"]
+# Copy the JAR file from the builder stage
+COPY --from=builder /app/target/back-0.0.1-SNAPSHOT.war ./app.war
+
+# Expose port 8080
+EXPOSE 8080
+
+# Define the command to run the application
+CMD ["java", "-jar", "app.war"]
+
