@@ -8,7 +8,7 @@ COPY pom.xml .
 COPY src ./src
 
 # Build the project
-RUN mvn clean -f pom.xml
+RUN mvn clean -f package
 # Use a lightweight base image
 FROM openjdk:21-jdk-slim
 # Set the working directory in the container
