@@ -10,7 +10,7 @@ COPY src ./src
 # Build the project
 RUN mvn clean package
 # Use a lightweight base image
-FROM openjdk:21-jdk-slim
+FROM openjdk:1.8-jdk-slim
 # Set the working directory in the container
 WORKDIR /app
 
