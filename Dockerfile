@@ -1,5 +1,5 @@
 # Use a Maven & Java base image
-FROM maven:3.8.4-openjdk-11 AS builder
+FROM maven:4-openjdk-11 AS builder
 # Set the working directory in the container
 WORKDIR /app
 # Copy the Maven configuration file
@@ -10,7 +10,7 @@ COPY src ./src
 # Build the project
 RUN mvn clean package
 # Use a lightweight base image
-FROM openjdk:11-jdk-slim
+FROM openjdk:21-jdk-slim
 # Set the working directory in the container
 WORKDIR /app
 
