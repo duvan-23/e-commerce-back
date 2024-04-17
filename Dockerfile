@@ -1,5 +1,5 @@
 # Use a Maven & Java base image
-FROM maven:3.9.5-openjdk-11 AS builder
+FROM maven:3.8.4-openjdk-11 AS builder
 # Set the working directory in the container
 WORKDIR /app
 # Copy the Maven configuration file
