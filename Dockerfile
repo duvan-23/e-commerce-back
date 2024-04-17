@@ -1,25 +1,12 @@
-# Use a Maven & Java base image
-FROM maven:3.8.4-openjdk-11 AS builder
-# Set the working directory in the container
-WORKDIR /app
-# Copy the Maven configuration file
-COPY pom.xml .
-# Copy the source code
-COPY src ./src
-
-# Build the project
+FROM maven:3.9.6-eclipse-temurin-21 AS build
+COPY . .
 RUN mvn clean package
-# Use a lightweight base image
-FROM openjdk:21-jdk-slim
-# Set the working directory in the container
-WORKDIR /app
 
-# Copy the JAR file from the builder stage
-COPY --from=builder /app/target/back-0.0.1-SNAPSHOT.war ./app.war
-
-# Expose port 8080
-EXPOSE 8080
-
-# Define the command to run the application
-CMD ["java", "-jar", "app.war"]
-
+# Usamos una imagen de Openjdk
+# Exponemos el puerto que nuestro componente va a usar para escuchar peticiones
+# Copiamos desde "build" el JAR generado (la ruta de generacion es la misma que veriamos en local) y lo movemos y renombramos en destino como 
+# Marcamos el punto de arranque de la imagen con el comando "java -jar app.jar" que ejecutará nuestro componente.
+FROM openjdk:21
+EXPOSE 8761
+COPY --from=build /target/back-0.0.1-SNAPSHOT.war app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]
